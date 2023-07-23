@@ -16,11 +16,13 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(
-	morgan({
-		format: "dev",
+	morgan("dev", {
+		skip: (req, res) => {
+			return res.statusCode < 400;
+		},
 	})
 );
-// app.use(express.urlencoded({ extended: false }));
+
 
 connectDB();
 
@@ -29,5 +31,6 @@ connectDB();
 app.use("/api", rootRoute);
 
 app.listen(PORT, () => {
+	
 	console.log("Server is running @ ", PORT);
 });
